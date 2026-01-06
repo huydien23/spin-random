@@ -457,7 +457,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                     />
                 )}
                 <span className="relative z-10 drop-shadow-md">
-                    {isSpinning ? '🎯 ĐANG QUAY...' : '🎰 QUAY NGAY!'}
+                    {isSpinning ? 'ĐANG QUAY...' : 'QUAY NGAY!'}
                 </span>
             </motion.button>
         </div>

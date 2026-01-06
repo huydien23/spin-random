@@ -152,7 +152,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                     : '0 4px 0 #002D5A, 0 6px 15px rgba(0,84,166,0.3)',
                             }}
                         >
-                            {prize.isWin ? '🎁 Nhận quà tại quầy' : '🔄 Quay lại'}
+                            {prize.isWin ? '🎁 Nhận quà tại quầy' : 'Quay lại'}
                         </motion.button>
                     </motion.div>
                 </motion.div>

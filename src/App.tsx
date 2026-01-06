@@ -66,7 +66,6 @@ const FloatingIcons = () => {
 function App() {
   const [result, setResult] = useState<Prize | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isSpinning, setIsSpinning] = useState(false)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
   const [prizes, setPrizes] = useState<Prize[]>(() => {
@@ -96,11 +95,10 @@ function App() {
     .every(p => p.quantity === 0)
 
   const handleSpinStart = () => {
-    setIsSpinning(true)
+    // Wheel is spinning
   }
 
   const handleSpinEnd = (winner: Prize) => {
-    setIsSpinning(false)
     setResult(winner)
 
     // Decrement quantity if it's a real prize

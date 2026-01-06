@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap");
+
+@theme {
+  /* VHU Brand Colors */
+  --color-vhu-blue: #0054a6;
+  --color-vhu-gold: #ffd700;
+  --color-vhu-red: #e31837;
+  --color-vhu-navy: #001f3f;
+  --color-vhu-light: #f8fafc;
+  --color-vhu-gold-dark: #d4af37;
+
+  /* Custom Animations */
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-bounce-short: bounce 0.5s ease-in-out 2;
+  --animate-glow: glow 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-gold: pulse-gold 2s ease-in-out infinite;
+  --animate-sparkle: sparkle 1.5s ease-in-out infinite;
+
+  /* Font */
+  --font-family-sans: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+/* Custom Keyframes */
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-gold {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes wheel-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to sure everything still looks the same.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  body {
+    font-family: "Be Vietnam Pro", system-ui, sans-serif;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .text-shadow-gold {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffa500 50%, #ffd700 100%);
+  }
+
+  .gradient-vhu {
+    background: linear-gradient(180deg, #001f3f 0%, #0054a6 50%, #001f3f 100%);
+  }
+}

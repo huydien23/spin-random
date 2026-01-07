@@ -173,18 +173,18 @@ function App() {
       />
 
       {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start px-3 sm:px-4 pt-6 sm:pt-8 pb-4 sm:pb-6">
 
         {/* Logo */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-2 sm:mb-4"
+          className="mb-1 sm:mb-3"
         >
           <img
             src="/logo.png"
             alt="VHU Logo"
-            className="h-16 sm:h-20 md:h-24 w-auto object-contain"
+            className="h-14 sm:h-20 md:h-24 w-auto object-contain"
             style={{
               filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
             }}
@@ -196,7 +196,7 @@ function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-center mb-4 sm:mb-6"
+          className="text-center mb-2 sm:mb-4"
         >
           <h1
             className="text-2xl sm:text-4xl md:text-5xl font-black text-[#0054A6] mb-1 tracking-tight"

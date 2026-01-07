@@ -259,9 +259,9 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     const centerRadius = wheelSize < 320 ? 32 : 40
 
     return (
-        <div className="flex flex-col items-center gap-5 sm:gap-6">
+        <div className="flex flex-col items-center gap-3 sm:gap-5">
             {/* Wheel Container */}
-            <div className="relative" style={{ width: wheelSize + 30, height: wheelSize + 60 }}>
+            <div className="relative" style={{ width: wheelSize + 30, height: wheelSize + 50 }}>
 
                 {/* Pointer - Premium Design */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">

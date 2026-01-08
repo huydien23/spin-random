@@ -539,7 +539,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                 {/* Shine effect */}
                 {!isSpinning && (
                     <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
                         animate={{
                             x: ['-100%', '200%'],
                         }}

@@ -42,7 +42,8 @@ export default function ManagePanel({
             setEditingPrizes(prizes)
             setSelectedPrizeIds([]) // Clear selections when opening
         }
-    }, [isOpen, prizes])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen])
 
     const handleQuantityChange = (id: string, delta: number) => {
         setEditingPrizes(prev =>
@@ -215,7 +216,7 @@ export default function ManagePanel({
                             className="fixed right-0 top-0 bottom-0 w-full sm:w-[400px] md:w-[450px] bg-white shadow-2xl z-50 flex flex-col"
                         >
                             {/* Header */}
-                            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-[#0054A6] to-[#003D7A]">
+                            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-linear-to-r from-[#0054A6] to-[#003D7A]">
                                 <div className="flex items-center gap-2 text-white">
                                     <Settings className="w-5 h-5" />
                                     <h2 className="text-lg font-bold">Quản Lý Phần Quà</h2>
@@ -253,7 +254,7 @@ export default function ManagePanel({
                             <div className="p-4 border-b border-gray-200 space-y-2">
                                 <button
                                     onClick={handleAddPrize}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
+                                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
                                 >
                                     <PlusCircle className="w-5 h-5" />
                                     <span>Thêm Ô Mới</span>
@@ -341,7 +342,7 @@ export default function ManagePanel({
                                                 >
                                                     <Minus className="w-4 h-4" />
                                                 </button>
-                                                <span className="min-w-[40px] text-center font-bold text-lg">
+                                                <span className="min-w-10 text-center font-bold text-lg">
                                                     {prize.quantity}
                                                 </span>
                                                 <button
@@ -412,7 +413,7 @@ export default function ManagePanel({
                                     </button>
                                     <button
                                         onClick={handleSave}
-                                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#0054A6] to-[#003D7A] hover:opacity-90 text-white font-medium rounded-lg transition-opacity shadow-md"
+                                        className="flex-1 px-4 py-2.5 bg-linear-to-r from-[#0054A6] to-[#003D7A] hover:opacity-90 text-white font-medium rounded-lg transition-opacity shadow-md"
                                     >
                                         Lưu
                                     </button>

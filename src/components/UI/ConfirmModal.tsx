@@ -54,7 +54,7 @@ export default function ConfirmModal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+                    className="fixed inset-0 z-60 flex items-center justify-center p-4"
                     onClick={onClose}
                 >
                     {/* Backdrop */}
@@ -79,7 +79,7 @@ export default function ConfirmModal({
 
                         {/* Icon */}
                         <div className="flex justify-center mb-4">
-                            <div className={`p-4 rounded-full bg-gradient-to-br ${currentColor.bg} bg-opacity-10`}>
+                            <div className={`p-4 rounded-full bg-linear-to-br ${currentColor.bg} bg-opacity-10`}>
                                 <AlertTriangle className={`w-12 h-12 ${currentColor.icon}`} />
                             </div>
                         </div>
@@ -104,7 +104,7 @@ export default function ConfirmModal({
                             </button>
                             <button
                                 onClick={handleConfirm}
-                                className={`flex-1 px-6 py-3 bg-gradient-to-r ${currentColor.button} text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg`}
+                                className={`flex-1 px-6 py-3 bg-linear-to-r ${currentColor.button} text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg`}
                             >
                                 {confirmText}
                             </button>

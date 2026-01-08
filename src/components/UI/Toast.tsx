@@ -59,7 +59,7 @@ export default function Toast({
         }
     }
 
-    const { icon: Icon, colors, bgColor, textColor, iconColor } = config[type]
+    const { colors, bgColor, textColor } = config[type]
 
     return (
         <AnimatePresence>
@@ -68,11 +68,11 @@ export default function Toast({
                     initial={{ opacity: 0, y: -50, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                    className="fixed top-6 left-1/2 -translate-x-1/2 z-[70] max-w-md w-full mx-4"
+                    className="fixed top-6 left-1/2 -translate-x-1/2 z-70 max-w-md w-full mx-4"
                 >
                     <div className={`${bgColor} rounded-2xl shadow-2xl border-2 border-white overflow-hidden`}>
                         {/* Gradient bar */}
-                        <div className={`h-1.5 bg-gradient-to-r ${colors}`} />
+                        <div className={`h-1.5 bg-linear-to-r ${colors}`} />
                         
                         <div className="p-4 flex items-start gap-3">
                             {/* Message */}
@@ -83,7 +83,7 @@ export default function Toast({
                             {/* Close Button */}
                             <button
                                 onClick={onClose}
-                                className={`flex-shrink-0 p-1 hover:bg-white/50 rounded-lg transition-colors ${textColor}`}
+                                className={`shrink-0 p-1 hover:bg-white/50 rounded-lg transition-colors ${textColor}`}
                             >
                                 <X className="w-5 h-5" />
                             </button>

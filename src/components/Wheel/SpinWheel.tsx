@@ -129,9 +129,12 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     const segmentAngle = 360 / prizes.length
     const numLEDs = 24 // Number of LED lights around the wheel
 
+    // Use prizes directly without shuffling
+    const displayPrizes = prizes
+
     // Responsive icon size based on number of prizes
     const getResponsiveIconSize = () => {
-        const numPrizes = prizes.length
+        const numPrizes = displayPrizes.length
         const baseSize = wheelSize < 320 ? 24 : 28
         
         // Giảm kích thước khi có nhiều ô hơn
@@ -165,7 +168,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     const getIconPosition = (index: number) => {
         const angle = ((index + 0.5) * segmentAngle - 90) * (Math.PI / 180)
         // Điều chỉnh radius dựa trên số lượng prizes
-        const radiusOffset = prizes.length > 10 ? 0.18 : 0.22
+        const radiusOffset = displayPrizes.length > 10 ? 0.18 : 0.22
         const radius = wheelSize / 2 - (wheelSize * radiusOffset)
         const centerX = wheelSize / 2
         const centerY = wheelSize / 2
@@ -203,12 +206,15 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
         // Play tick sound when spinning
         playTickSound()
 
-        // Pick a random winner
+        // Pick a random winner from ORIGINAL prizes array (not shuffled)
         const winningIndex = Math.floor(Math.random() * prizes.length)
         const winner = prizes[winningIndex]
+        
+        // Find this winner in the shuffled array for correct visual position
+        const shuffledIndex = displayPrizes.findIndex(p => p.id === winner.id)
 
         // Calculate rotation
-        const segmentAngle = 360 / prizes.length
+        const segmentAngle = 360 / displayPrizes.length
         const spins = 5 + Math.floor(Math.random() * 3) // 5-7 full rotations
 
         // Normalize current rotation to 0-360 range
@@ -216,7 +222,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
 
         // Calculate the center angle of the winning segment
         // Segment 0 starts at top (0 degrees), each segment spans segmentAngle degrees clockwise
-        const segmentCenterAngle = winningIndex * segmentAngle + segmentAngle / 2
+        const segmentCenterAngle = shuffledIndex * segmentAngle + segmentAngle / 2
 
         // Add random offset within segment for natural feel (not always dead center)
         const randomOffset = (Math.random() - 0.5) * segmentAngle * 0.5
@@ -253,7 +259,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
             }
             
             onSpinEnd?.(winner)
-        }, 5000)
+        }, 6500)
     }
 
     const pointerSize = wheelSize < 320 ? 36 : 44
@@ -360,14 +366,14 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                                     className="rounded-full"
                                     animate={{ rotate: rotation }}
                                     transition={{
-                                        duration: 5,
-                                        ease: [0.2, 0.8, 0.2, 1],
+                                        duration: 7.0,
+                                        ease: [0.25, 0.1, 0.25, 1],
                                     }}
                                     style={{ transformOrigin: 'center center' }}
                                 >
                                     {/* Gradient Definitions */}
                                     <defs>
-                                        {prizes.map((prize, index) => (
+                                        {displayPrizes.map((prize, index) => (
                                             <linearGradient
                                                 key={`grad-${prize.id}`}
                                                 id={`segment-gradient-${index}`}
@@ -388,7 +394,7 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                                     </defs>
 
                                     {/* Segments with Gradients */}
-                                    {prizes.map((prize, index) => (
+                                    {displayPrizes.map((prize, index) => (
                                         <path
                                             key={prize.id}
                                             d={getSegmentPath(index)}
@@ -400,15 +406,15 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                                     ))}
 
                                     {/* Icons/Images - Main Visual */}
-                                    {prizes.map((prize, index) => {
+                                    {displayPrizes.map((prize, index) => {
                                         const pos = getIconPosition(index)
 
                                         // If prize has image, render it instead of emoji
                                         if (prize.image) {
                                             // Điều chỉnh size dựa trên số lượng prizes để tránh vỡ
                                             let imageMultiplier = 3.5
-                                            if (prizes.length >= 7) imageMultiplier = 2.8
-                                            if (prizes.length >= 10) imageMultiplier = 2.2
+                                            if (displayPrizes.length >= 7) imageMultiplier = 2.8
+                                            if (displayPrizes.length >= 10) imageMultiplier = 2.2
                                             
                                             const imageSize = iconFontSize * imageMultiplier
                                             const isSpecial = prize.isSpecial

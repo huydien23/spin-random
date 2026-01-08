@@ -84,7 +84,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                         )}
 
                         <div 
-                            className={`relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 max-w-[90vw] sm:max-w-sm w-full text-center overflow-hidden ${
+                            className={`relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 lg:p-14 max-w-[90vw] sm:max-w-md md:max-w-xl lg:max-w-2xl w-full text-center overflow-hidden ${
                                 prize.isSpecial ? 'ring-2 ring-orange-400' : ''
                             }`}
                         >
@@ -149,7 +149,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 )}
                                 
                                 <div 
-                                    className={`relative w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-full flex items-center justify-center text-4xl sm:text-5xl overflow-hidden ${
+                                    className={`relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto rounded-full flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl overflow-hidden ${
                                         prize.isSpecial ? 'ring-4 ring-orange-400 ring-offset-2' : ''
                                     }`}
                                     style={{
@@ -185,7 +185,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.25 }}
-                                className={`text-xl sm:text-2xl font-black mb-1 ${
+                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 ${
                                     prize.isSpecial 
                                         ? 'text-transparent bg-clip-text'
                                         : prize.isWin 
@@ -210,7 +210,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.35 }}
-                                className={`text-sm mb-2 ${prize.isSpecial ? 'text-orange-500 font-medium' : 'text-gray-500'}`}
+                                className={`text-base md:text-lg lg:text-xl mb-3 md:mb-4 ${prize.isSpecial ? 'text-orange-500 font-medium' : 'text-gray-500'}`}
                             >
                                 {prize.isSpecial 
                                     ? 'Bạn đã trúng phần quà đặc biệt:' 
@@ -224,7 +224,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 0.45 }}
-                                className={`font-black mb-5 sm:mb-6 ${prize.isSpecial ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}
+                                className={`font-black mb-6 sm:mb-8 md:mb-10 ${prize.isSpecial ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'}`}
                                 style={{
                                     background: prize.isSpecial
                                         ? 'linear-gradient(135deg, #FF6B6B, #FFA500, #FFD700)'
@@ -247,7 +247,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 onClick={onClose}
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="relative w-full py-3.5 rounded-xl font-bold text-white transition-all overflow-hidden"
+                                className="relative w-full py-4 md:py-5 lg:py-6 rounded-xl md:rounded-2xl font-bold text-lg md:text-xl lg:text-2xl text-white transition-all overflow-hidden"
                                 style={{
                                     background: prize.isSpecial
                                         ? 'linear-gradient(135deg, #FFD700, #FFA500, #FF6B6B)'

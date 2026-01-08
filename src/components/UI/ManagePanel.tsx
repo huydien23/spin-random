@@ -46,7 +46,7 @@ export default function ManagePanel({
             setEditingPrizes(prizes)
             setSelectedPrizeIds([]) // Clear selections when opening
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen])
 
     const handleQuantityChange = (id: string, delta: number) => {
@@ -55,6 +55,16 @@ export default function ManagePanel({
                 p.id === id ? { ...p, quantity: Math.max(0, p.quantity + delta) } : p
             )
         )
+    }
+
+    const handleDirectQuantityChange = (id: string, value: string) => {
+        const numValue = parseInt(value, 10)
+        // Chỉ update nếu là số hợp lệ và >= 0
+        if (!isNaN(numValue) && numValue >= 0) {
+            setEditingPrizes(prev =>
+                prev.map(p => p.id === id ? { ...p, quantity: numValue } : p)
+            )
+        }
     }
 
     const handleLabelChange = (id: string, label: string) => {
@@ -153,8 +163,8 @@ export default function ManagePanel({
     }
 
     const toggleSelectPrize = (prizeId: string) => {
-        setSelectedPrizeIds(prev => 
-            prev.includes(prizeId) 
+        setSelectedPrizeIds(prev =>
+            prev.includes(prizeId)
                 ? prev.filter(id => id !== prizeId)
                 : [...prev, prizeId]
         )
@@ -182,6 +192,12 @@ export default function ManagePanel({
         setEditingPrizes(filtered)
         showToast(`Đã xóa ${selectedPrizeIds.length} ô. Nhớ nhấn "Lưu" để áp dụng.`, 'success')
         setSelectedPrizeIds([])
+    }
+
+    const handleIsWinToggle = (id: string) => {
+        setEditingPrizes(prev =>
+            prev.map(p => (p.id === id ? { ...p, isWin: !p.isWin } : p))
+        )
     }
 
     const handleSpecialToggle = (id: string) => {
@@ -304,13 +320,12 @@ export default function ManagePanel({
                                 {editingPrizes.map(prize => (
                                     <div
                                         key={prize.id}
-                                        className={`rounded-lg p-3 border-2 transition-all relative ${
-                                            prize.isSpecial 
-                                                ? 'border-orange-300 bg-orange-50'
-                                                : selectedPrizeIds.includes(prize.id) 
-                                                    ? 'border-blue-500 bg-blue-50' 
-                                                    : 'border-gray-200 bg-gray-50 hover:border-[#0054A6]'
-                                        }`}
+                                        className={`rounded-lg p-3 border-2 transition-all relative ${prize.isSpecial
+                                            ? 'border-orange-300 bg-orange-50'
+                                            : selectedPrizeIds.includes(prize.id)
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 bg-gray-50 hover:border-[#0054A6]'
+                                            }`}
                                     >
                                         {/* Special Badge */}
                                         {prize.isSpecial && (
@@ -359,9 +374,14 @@ export default function ManagePanel({
                                                 >
                                                     <Minus className="w-4 h-4" />
                                                 </button>
-                                                <span className="min-w-10 text-center font-bold text-lg">
-                                                    {prize.quantity}
-                                                </span>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={prize.quantity}
+                                                    onChange={(e) => handleDirectQuantityChange(prize.id, e.target.value)}
+                                                    onFocus={(e) => e.target.select()}
+                                                    className="min-w-[60px] text-center font-bold text-lg border-2 border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:border-[#0054A6] transition-colors"
+                                                />
                                                 <button
                                                     onClick={() => handleQuantityChange(prize.id, 1)}
                                                     className="p-1.5 rounded-full bg-green-100 hover:bg-green-200 text-green-600 transition-colors"
@@ -369,6 +389,24 @@ export default function ManagePanel({
                                                     <Plus className="w-4 h-4" />
                                                 </button>
                                             </div>
+                                        </div>
+
+                                        {/* IsWin Toggle */}
+                                        <div className="mt-3 pt-3 border-t border-gray-200">
+                                            <label className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={prize.isWin}
+                                                    onChange={() => handleIsWinToggle(prize.id)}
+                                                    className="w-4 h-4 accent-green-600 cursor-pointer"
+                                                />
+                                                <span className="text-sm text-gray-700">
+                                                    Trừ số lượng khi trúng
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                    ({prize.isWin ? 'Phần quà thật' : 'Vô hạn'})
+                                                </span>
+                                            </label>
                                         </div>
 
                                         {/* Image Upload */}
@@ -398,11 +436,10 @@ export default function ManagePanel({
                                         <div className="mt-3 pt-3 border-t border-gray-200">
                                             <button
                                                 onClick={() => handleSpecialToggle(prize.id)}
-                                                className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-medium transition-all ${
-                                                    prize.isSpecial
-                                                        ? 'bg-orange-400 text-white'
-                                                        : 'bg-gray-100 hover:bg-orange-100 text-gray-600 hover:text-orange-600'
-                                                }`}
+                                                className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-medium transition-all ${prize.isSpecial
+                                                    ? 'bg-orange-400 text-white'
+                                                    : 'bg-gray-100 hover:bg-orange-100 text-gray-600 hover:text-orange-600'
+                                                    }`}
                                             >
                                                 <Star className={`w-4 h-4 ${prize.isSpecial ? 'fill-white' : ''}`} />
                                                 {prize.isSpecial ? 'Phần Quà Đặc Biệt' : 'Đặt là đặc biệt'}

@@ -32,13 +32,13 @@ export interface Prize {
 const DEFAULT_PRIZES: Prize[] = [
   { id: '1', label: 'Gấu VHU', icon: '', color: '#0054A6', colorEnd: '#003D7A', isWin: true, quantity: 5, image: gauImg, isSpecial: true },
   { id: '3', label: 'Balo VHU', icon: '', color: '#FFD700', colorEnd: '#D4AF37', isWin: true, quantity: 5, image: baloImg },
-  { id: '2', label: 'Chúc may mắn lần sau', icon: '', color: '#64748B', colorEnd: '#475569', isWin: false, quantity: 3, image: sadIcon },
+  { id: '2', label: 'Chúc may mắn lần sau', icon: '', color: '#64748B', colorEnd: '#475569', isWin: false, quantity: 5, image: sadIcon },
   { id: '4', label: 'Bình Nước', icon: '', color: '#E31837', colorEnd: '#B91C3C', isWin: true, quantity: 5, image: binhNuocImg },
   { id: '6', label: 'Nón BH', icon: '', color: '#10B981', colorEnd: '#059669', isWin: true, quantity: 3, image: nonImg },
-  { id: '5', label: 'Chúc may mắn lần sau', icon: '', color: '#475569', colorEnd: '#334155', isWin: false, quantity: 3, image: sadIcon },
+  { id: '5', label: 'Chúc may mắn lần sau', icon: '', color: '#475569', colorEnd: '#334155', isWin: false, quantity: 5, image: sadIcon },
   { id: '7', label: 'Móc Khóa VHU', icon: '', color: '#F59E0B', colorEnd: '#D97706', isWin: true, quantity: 3, image: mocKhoaImg },
   { id: '9', label: 'Kì Lân VHU', icon: '', color: '#8B5CF6', colorEnd: '#7C3AED', isWin: true, quantity: 3, image: nguaImg },
-  { id: '8', label: 'Chúc may mắn lần sau', icon: '', color: '#334155', colorEnd: '#1E293B', isWin: false, quantity: 3, image: sadIcon },
+  { id: '8', label: 'Chúc may mắn lần sau', icon: '', color: '#334155', colorEnd: '#1E293B', isWin: false, quantity: 5, image: sadIcon },
 ]
 
 // LocalStorage key

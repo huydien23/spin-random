@@ -21,8 +21,6 @@ export default function PasswordModal({ isOpen, onClose, onSuccess }: PasswordMo
     // Focus input when modal opens
     useEffect(() => {
         if (isOpen) {
-            setPassword('')
-            setError('')
             setTimeout(() => {
                 inputRef.current?.focus()
             }, 100)
@@ -45,9 +43,15 @@ export default function PasswordModal({ isOpen, onClose, onSuccess }: PasswordMo
         }
     }
 
+    const handleClose = () => {
+        setPassword('')
+        setError('')
+        onClose()
+    }
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Escape') {
-            onClose()
+            handleClose()
         }
     }
 
@@ -59,7 +63,7 @@ export default function PasswordModal({ isOpen, onClose, onSuccess }: PasswordMo
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                    onClick={onClose}
+                    onClick={handleClose}
                 >
                     {/* Backdrop */}
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
@@ -85,7 +89,7 @@ export default function PasswordModal({ isOpen, onClose, onSuccess }: PasswordMo
                     >
                         {/* Close button */}
                         <button
-                            onClick={onClose}
+                            onClick={handleClose}
                             className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 transition-colors"
                         >
                             <X className="w-5 h-5" />

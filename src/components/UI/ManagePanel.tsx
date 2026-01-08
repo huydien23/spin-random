@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, Minus, RotateCcw, Settings, Upload, Trash2, PlusCircle, Star } from 'lucide-react'
+import { X, Plus, Minus, RotateCcw, Settings, Upload, Trash2, PlusCircle, Star, Volume2, VolumeX } from 'lucide-react'
 import type { Prize } from '../../App'
 import ConfirmModal from './ConfirmModal'
 import Toast from './Toast'
@@ -12,6 +12,8 @@ interface ManagePanelProps {
     prizes: Prize[]
     onUpdatePrizes: (prizes: Prize[]) => void
     onReset: () => void
+    isMusicEnabled: boolean
+    onToggleMusic: () => void
 }
 
 export default function ManagePanel({
@@ -20,6 +22,8 @@ export default function ManagePanel({
     prizes,
     onUpdatePrizes,
     onReset,
+    isMusicEnabled,
+    onToggleMusic,
 }: ManagePanelProps) {
     const [editingPrizes, setEditingPrizes] = useState(prizes)
     const [selectedPrizeIds, setSelectedPrizeIds] = useState<string[]>([])
@@ -229,12 +233,25 @@ export default function ManagePanel({
                                         </span>
                                     )}
                                 </div>
-                                <button
-                                    onClick={handleCancel}
-                                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                                >
-                                    <X className="w-5 h-5 text-white" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={onToggleMusic}
+                                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                        title={isMusicEnabled ? 'Tắt nhạc nền' : 'Bật nhạc nền'}
+                                    >
+                                        {isMusicEnabled ? (
+                                            <Volume2 className="w-5 h-5 text-white" />
+                                        ) : (
+                                            <VolumeX className="w-5 h-5 text-white" />
+                                        )}
+                                    </button>
+                                    <button
+                                        onClick={handleCancel}
+                                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                    >
+                                        <X className="w-5 h-5 text-white" />
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Warning Badge */}

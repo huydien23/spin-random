@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import SpinWheel from './components/Wheel/SpinWheel'
 import ResultModal from './components/UI/ResultModal'
 import ManagePanel from './components/UI/ManagePanel'
 import ManagerButton from './components/UI/ManagerButton'
-import PasswordModal from './components/UI/PasswordModal'
 
 // Import images from assets
 import gauImg from './assets/gau.jpg'
@@ -78,7 +77,18 @@ function App() {
   const [result, setResult] = useState<Prize | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+  const [isSpinning, setIsSpinning] = useState(false)
+  
+  // Audio refs
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null)
+  const spinningMusicRef = useRef<HTMLAudioElement | null>(null)
+  
+  // Background music enabled state
+  const [isMusicEnabled, setIsMusicEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('vhu_music_enabled')
+    return saved !== null ? JSON.parse(saved) : true
+  })
+  
   const [prizes, setPrizes] = useState<Prize[]>(() => {
     // Load from localStorage or use defaults
     const saved = localStorage.getItem(STORAGE_KEY)
@@ -129,6 +139,53 @@ function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prizes))
   }, [prizes])
 
+  // Save music enabled state to localStorage
+  useEffect(() => {
+    localStorage.setItem('vhu_music_enabled', JSON.stringify(isMusicEnabled))
+  }, [isMusicEnabled])
+
+  // Initialize and play background music
+  useEffect(() => {
+    // Initialize background music
+    const bgMusic = new Audio('/sounds/happy-sound.mp3')
+    bgMusic.loop = true
+    bgMusic.volume = 0.3
+    backgroundMusicRef.current = bgMusic
+
+    // Initialize spinning music
+    const spinMusic = new Audio('/sounds/sound-spinning.mp3')
+    spinMusic.loop = true
+    spinMusic.volume = 0.5
+    spinningMusicRef.current = spinMusic
+
+    // Play background music on user interaction if enabled
+    const playBgMusic = () => {
+      if (isMusicEnabled) {
+        bgMusic.play().catch(err => console.log('Background music play failed:', err))
+      }
+      // Remove listener after first interaction
+      document.removeEventListener('click', playBgMusic)
+    }
+    document.addEventListener('click', playBgMusic)
+
+    return () => {
+      bgMusic.pause()
+      spinMusic.pause()
+      document.removeEventListener('click', playBgMusic)
+    }
+  }, [isMusicEnabled])
+
+  // Handle music toggle
+  useEffect(() => {
+    if (backgroundMusicRef.current) {
+      if (isMusicEnabled && !isSpinning) {
+        backgroundMusicRef.current.play().catch(err => console.log('Background music play failed:', err))
+      } else if (!isMusicEnabled) {
+        backgroundMusicRef.current.pause()
+      }
+    }
+  }, [isMusicEnabled, isSpinning])
+
   // Filter prizes with quantity > 0
   const filteredPrizes = prizes.filter(prize => prize.quantity > 0)
 
@@ -138,11 +195,39 @@ function App() {
     .every(p => p.quantity === 0)
 
   const handleSpinStart = () => {
-    // Wheel is spinning
+    setIsSpinning(true)
+    
+    // Fade out background music and play spinning music
+    if (backgroundMusicRef.current) {
+      const fadeOut = setInterval(() => {
+        if (backgroundMusicRef.current && backgroundMusicRef.current.volume > 0.05) {
+          backgroundMusicRef.current.volume -= 0.05
+        } else {
+          if (backgroundMusicRef.current) {
+            backgroundMusicRef.current.pause()
+            backgroundMusicRef.current.volume = 0.3
+          }
+          clearInterval(fadeOut)
+        }
+      }, 50)
+    }
+    
+    // Play spinning music
+    if (spinningMusicRef.current) {
+      spinningMusicRef.current.currentTime = 0
+      spinningMusicRef.current.play().catch(err => console.log('Spinning music play failed:', err))
+    }
   }
 
   const handleSpinEnd = (winner: Prize) => {
     setResult(winner)
+    setIsSpinning(false)
+
+    // Stop spinning music
+    if (spinningMusicRef.current) {
+      spinningMusicRef.current.pause()
+      spinningMusicRef.current.currentTime = 0
+    }
 
     // Decrement quantity if it's a real prize
     if (winner.isWin && winner.quantity > 0) {
@@ -161,6 +246,16 @@ function App() {
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setResult(null)
+    
+    // Resume background music after closing modal if enabled
+    if (backgroundMusicRef.current && isMusicEnabled) {
+      backgroundMusicRef.current.volume = 0.3
+      backgroundMusicRef.current.play().catch(err => console.log('Background music resume failed:', err))
+    }
+  }
+
+  const handleToggleMusic = () => {
+    setIsMusicEnabled(prev => !prev)
   }
 
   const handleResetPrizes = () => {
@@ -176,14 +271,9 @@ function App() {
     if (isAuthenticated) {
       setIsPanelOpen(true)
     } else {
-      setIsPasswordModalOpen(true)
+      // Open panel and let it handle password check
+      setIsPanelOpen(true)
     }
-  }
-
-  // Handle successful password authentication
-  const handlePasswordSuccess = () => {
-    setIsPasswordModalOpen(false)
-    setIsPanelOpen(true)
   }
 
   return (
@@ -318,13 +408,8 @@ function App() {
         prizes={prizes}
         onUpdatePrizes={setPrizes}
         onReset={handleResetPrizes}
-      />
-
-      {/* Password Modal */}
-      <PasswordModal
-        isOpen={isPasswordModalOpen}
-        onClose={() => setIsPasswordModalOpen(false)}
-        onSuccess={handlePasswordSuccess}
+        isMusicEnabled={isMusicEnabled}
+        onToggleMusic={handleToggleMusic}
       />
 
       {/* Manager Button (Always visible for organizers) */}

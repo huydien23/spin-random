@@ -6,6 +6,14 @@ import ManagePanel from './components/UI/ManagePanel'
 import ManagerButton from './components/UI/ManagerButton'
 import PasswordModal from './components/UI/PasswordModal'
 
+// Import images from assets
+import gauImg from './assets/gau.jpg'
+import baloImg from './assets/balo.jpg'
+import binhNuocImg from './assets/binhnuoc.jpg'
+import nonImg from './assets/non.jpg'
+import mocKhoaImg from './assets/mockhoa.jpg'
+import nguaImg from './assets/ngua.jpg'
+
 // Prize Interface
 export interface Prize {
   id: string
@@ -16,18 +24,17 @@ export interface Prize {
   isWin: boolean
   quantity: number
   image?: string
+  isSpecial?: boolean
 }
 
-// Default VHU-Themed Prizes
+// Default VHU-Themed Prizes with Images
 const DEFAULT_PRIZES: Prize[] = [
-  { id: '1', label: 'Gấu VHU', icon: '🧸', color: '#0054A6', colorEnd: '#003D7A', isWin: true, quantity: 5 },
-  { id: '2', label: 'Balo VHU', icon: '🎒', color: '#FFD700', colorEnd: '#D4AF37', isWin: true, quantity: 5 },
-  { id: '3', label: 'Thử Lại', icon: '🔄', color: '#E31837', colorEnd: '#B91C3C', isWin: false, quantity: 999 },
-  { id: '4', label: 'Bình Nước', icon: '🍶', color: '#0054A6', colorEnd: '#003D7A', isWin: true, quantity: 5 },
-  { id: '5', label: 'Nón BH', icon: '⛑️', color: '#FFD700', colorEnd: '#D4AF37', isWin: true, quantity: 3 },
-  { id: '6', label: 'May Mắn', icon: '🍀', color: '#E31837', colorEnd: '#B91C3C', isWin: false, quantity: 999 },
-  { id: '7', label: 'Móc Khoá', icon: '🔑', color: '#0054A6', colorEnd: '#003D7A', isWin: true, quantity: 10 },
-  { id: '8', label: 'Áo VHU', icon: '👕', color: '#FFD700', colorEnd: '#D4AF37', isWin: true, quantity: 3 },
+  { id: '1', label: 'Gấu VHU', icon: '', color: '#0054A6', colorEnd: '#003D7A', isWin: true, quantity: 5, image: gauImg, isSpecial: true },
+  { id: '2', label: 'Balo VHU', icon: '', color: '#FFD700', colorEnd: '#D4AF37', isWin: true, quantity: 5, image: baloImg },
+  { id: '3', label: 'Bình Nước', icon: '', color: '#E31837', colorEnd: '#B91C3C', isWin: true, quantity: 5, image: binhNuocImg },
+  { id: '4', label: 'Nón BH', icon: '', color: '#10B981', colorEnd: '#059669', isWin: true, quantity: 3, image: nonImg },
+  { id: '5', label: 'Móc Khóa VHU', icon: '', color: '#F59E0B', colorEnd: '#D97706', isWin: true, quantity: 3, image: mocKhoaImg },
+  { id: '6', label: 'Kì Lân VHU', icon: '', color: '#8B5CF6', colorEnd: '#7C3AED', isWin: true, quantity: 3, image: nguaImg },
 ]
 
 // LocalStorage key
@@ -73,7 +80,39 @@ function App() {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
-        return JSON.parse(saved)
+        const loadedPrizes = JSON.parse(saved)
+        
+        // Kiểm tra xem số lượng prizes có khớp với DEFAULT không
+        // Nếu khác nhau (thêm/bớt prizes) → Reset về DEFAULT
+        const defaultIds = DEFAULT_PRIZES.map(p => p.id).sort()
+        const loadedIds = loadedPrizes.map((p: Prize) => p.id).sort()
+        const idsMatch = JSON.stringify(defaultIds) === JSON.stringify(loadedIds)
+        
+        if (!idsMatch) {
+          // Số lượng/ID khác nhau → Reset về DEFAULT
+          console.log('Prizes structure changed, resetting to defaults')
+          return DEFAULT_PRIZES
+        }
+        
+        // Nếu số lượng khớp, kiểm tra xem có prize nào thiếu image không
+        const needsMigration = loadedPrizes.some((p: Prize) => {
+          const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
+          return defaultPrize && defaultPrize.image && !p.image
+        })
+        
+        // Migrate images từ DEFAULT nếu cần
+        if (needsMigration) {
+          const migratedPrizes = loadedPrizes.map((p: Prize) => {
+            const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
+            if (defaultPrize && defaultPrize.image && !p.image) {
+              return { ...p, image: defaultPrize.image }
+            }
+            return p
+          })
+          return migratedPrizes
+        }
+        
+        return loadedPrizes
       } catch {
         return DEFAULT_PRIZES
       }
@@ -252,6 +291,7 @@ function App() {
           ) : (
             // Active Wheel
             <SpinWheel
+              key={prizes.length} // Force re-render when prizes change
               prizes={filteredPrizes}
               onSpinStart={handleSpinStart}
               onSpinEnd={handleSpinEnd}

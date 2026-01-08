@@ -77,6 +77,52 @@
   }
 }
 
+@keyframes rainbow-border {
+  0% {
+    border-color: #e85d5d;
+  }
+  25% {
+    border-color: #e8a85d;
+  }
+  50% {
+    border-color: #5db8e8;
+  }
+  75% {
+    border-color: #9b5de8;
+  }
+  100% {
+    border-color: #e85d5d;
+  }
+}
+
+@keyframes special-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes sparkle-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.special-prize-border {
+  border-width: 3px;
+  animation: rainbow-border 3s linear infinite;
+}
+
+.special-sparkle {
+  animation: sparkle-rotate 3s linear infinite;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to sure everything still looks the same.

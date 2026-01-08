@@ -10,6 +10,7 @@ interface Prize {
     isWin: boolean
     quantity: number
     image?: string
+    isSpecial?: boolean
 }
 
 interface SpinWheelProps {
@@ -128,6 +129,20 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     const segmentAngle = 360 / prizes.length
     const numLEDs = 24 // Number of LED lights around the wheel
 
+    // Responsive icon size based on number of prizes
+    const getResponsiveIconSize = () => {
+        const numPrizes = prizes.length
+        const baseSize = wheelSize < 320 ? 24 : 28
+        
+        // Giảm kích thước khi có nhiều ô hơn
+        if (numPrizes > 12) return baseSize * 0.5  // 14px
+        if (numPrizes > 10) return baseSize * 0.65 // 18px
+        if (numPrizes > 8) return baseSize * 0.75  // 21px
+        return baseSize // 28px
+    }
+
+    const iconFontSize = getResponsiveIconSize()
+
     // Generate SVG path for each segment
     const getSegmentPath = (index: number) => {
         const startAngle = (index * segmentAngle - 90) * (Math.PI / 180)
@@ -149,21 +164,9 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     // Get icon position (closer to edge, larger)
     const getIconPosition = (index: number) => {
         const angle = ((index + 0.5) * segmentAngle - 90) * (Math.PI / 180)
-        const radius = wheelSize / 2 - (wheelSize * 0.22)
-        const centerX = wheelSize / 2
-        const centerY = wheelSize / 2
-
-        return {
-            x: centerX + radius * Math.cos(angle),
-            y: centerY + radius * Math.sin(angle),
-            rotation: (index + 0.5) * segmentAngle,
-        }
-    }
-
-    // Get text position (closer to center, smaller)
-    const getTextPosition = (index: number) => {
-        const angle = ((index + 0.5) * segmentAngle - 90) * (Math.PI / 180)
-        const radius = wheelSize / 2 - (wheelSize * 0.38)
+        // Điều chỉnh radius dựa trên số lượng prizes
+        const radiusOffset = prizes.length > 10 ? 0.18 : 0.22
+        const radius = wheelSize / 2 - (wheelSize * radiusOffset)
         const centerX = wheelSize / 2
         const centerY = wheelSize / 2
 
@@ -254,8 +257,6 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
     }
 
     const pointerSize = wheelSize < 320 ? 36 : 44
-    const iconFontSize = wheelSize < 320 ? 24 : 28
-    const labelFontSize = wheelSize < 320 ? 8 : 10
     const centerRadius = wheelSize < 320 ? 32 : 40
 
     return (
@@ -404,31 +405,55 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
 
                                         // If prize has image, render it instead of emoji
                                         if (prize.image) {
+                                            // Điều chỉnh size dựa trên số lượng prizes để tránh vỡ
+                                            let imageMultiplier = 3.5
+                                            if (prizes.length >= 7) imageMultiplier = 2.8
+                                            if (prizes.length >= 10) imageMultiplier = 2.2
+                                            
+                                            const imageSize = iconFontSize * imageMultiplier
+                                            const isSpecial = prize.isSpecial
+                                            
                                             return (
                                                 <foreignObject
                                                     key={`img-${prize.id}`}
-                                                    x={pos.x - (iconFontSize * 1.2)}
-                                                    y={pos.y - (iconFontSize * 1.2)}
-                                                    width={iconFontSize * 2.4}
-                                                    height={iconFontSize * 2.4}
+                                                    x={pos.x - imageSize / 2}
+                                                    y={pos.y - imageSize / 2}
+                                                    width={imageSize}
+                                                    height={imageSize}
                                                     transform={`rotate(${pos.rotation}, ${pos.x}, ${pos.y})`}
                                                 >
-                                                    <img
-                                                        src={prize.image}
-                                                        alt={prize.label}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '100%',
-                                                            objectFit: 'cover',
-                                                            borderRadius: '50%',
-                                                            border: '2px solid white',
-                                                        }}
-                                                    />
+                                                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <div 
+                                                            className={isSpecial ? 'special-prize-border' : ''}
+                                                            style={{
+                                                                width: '90%',
+                                                                height: '90%',
+                                                                borderRadius: '50%',
+                                                                padding: isSpecial ? '3px' : '0',
+                                                                background: isSpecial ? 'linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8B00FF)' : 'transparent',
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={prize.image}
+                                                                alt={prize.label}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: '100%',
+                                                                    objectFit: 'cover',
+                                                                    borderRadius: '50%',
+                                                                    border: isSpecial ? '2px solid white' : '3px solid white',
+                                                                    boxShadow: isSpecial 
+                                                                        ? '0 0 15px rgba(255,215,0,0.8), 0 0 30px rgba(255,165,0,0.5)' 
+                                                                        : '0 2px 8px rgba(0,0,0,0.2)',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </foreignObject>
                                             )
                                         }
 
-                                        // Otherwise render emoji as before
+                                        // Otherwise render emoji as before - CHỈ KHI KHÔNG CÓ HÌNH
                                         return (
                                             <text
                                                 key={`icon-${prize.id}`}
@@ -440,31 +465,6 @@ const SpinWheel = ({ prizes, onSpinStart, onSpinEnd }: SpinWheelProps) => {
                                                 transform={`rotate(${pos.rotation}, ${pos.x}, ${pos.y})`}
                                             >
                                                 {prize.icon}
-                                            </text>
-                                        )
-                                    })}
-
-                                    {/* Text Labels - Smaller, Below Icon */}
-                                    {prizes.map((prize, index) => {
-                                        const pos = getTextPosition(index)
-                                        return (
-                                            <text
-                                                key={`text-${prize.id}`}
-                                                x={pos.x}
-                                                y={pos.y}
-                                                textAnchor="middle"
-                                                dominantBaseline="middle"
-                                                fill="#FFFFFF"
-                                                fontSize={labelFontSize}
-                                                fontWeight="700"
-                                                fontFamily="'Be Vietnam Pro', sans-serif"
-                                                transform={`rotate(${pos.rotation}, ${pos.x}, ${pos.y})`}
-                                                style={{
-                                                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                                    letterSpacing: '0.5px',
-                                                }}
-                                            >
-                                                {prize.label}
                                             </text>
                                         )
                                     })}

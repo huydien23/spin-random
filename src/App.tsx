@@ -13,6 +13,7 @@ import nonImg from './assets/non.jpg'
 import mocKhoaImg from './assets/mockhoa.jpg'
 import nguaImg from './assets/ngua.jpg'
 import sadIcon from './assets/icon-sad.png'
+import welcomeIcon from './assets/welcome-icon.png'
 
 // Prize Interface
 export interface Prize {
@@ -37,7 +38,7 @@ const DEFAULT_PRIZES: Prize[] = [
   { id: '5', label: 'Chúc may mắn lần sau', icon: '', color: '#475569', colorEnd: '#334155', isWin: false, quantity: 5, image: sadIcon },
   { id: '7', label: 'Móc Khóa VHU', icon: '', color: '#F59E0B', colorEnd: '#D97706', isWin: true, quantity: 3, image: mocKhoaImg },
   { id: '9', label: 'Kì Lân VHU', icon: '', color: '#8B5CF6', colorEnd: '#7C3AED', isWin: true, quantity: 3, image: nguaImg },
-  { id: '8', label: 'Chúc may mắn lần sau', icon: '', color: '#334155', colorEnd: '#1E293B', isWin: false, quantity: 5, image: sadIcon },
+  { id: '8', label: 'Hẹn bạn lần sau đến trường đại học Văn Hiến nhận quà!', icon: '', color: '#334155', colorEnd: '#1E293B', isWin: false, quantity: 5, image: welcomeIcon },
 ]
 
 // LocalStorage key
@@ -126,7 +127,21 @@ function App() {
           return migratedPrizes
         }
         
-        return loadedPrizes
+        // Đảm bảo isWin property được sync từ DEFAULT_PRIZES
+        const syncedPrizes = loadedPrizes.map((p: Prize) => {
+          const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
+          if (defaultPrize) {
+            return { 
+              ...p, 
+              isWin: defaultPrize.isWin,
+              image: p.image || defaultPrize.image,
+              label: defaultPrize.label // Sync label từ DEFAULT
+            }
+          }
+          return p
+        })
+        
+        return syncedPrizes
       } catch {
         return DEFAULT_PRIZES
       }

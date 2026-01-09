@@ -45,7 +45,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                             height={windowSize.height}
                             recycle={prize.isSpecial}
                             numberOfPieces={prize.isSpecial ? 150 : 500}
-                            colors={prize.isSpecial 
+                            colors={prize.isSpecial
                                 ? ['#FFD700', '#FFA500', '#FF6B6B', '#E85D5D', '#FFFFFF']
                                 : ['#FFD700', '#0054A6', '#FF8C00', '#FFFFFF', '#FF6B6B', '#4ECDC4']
                             }
@@ -66,7 +66,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                     >
                         {/* Special Prize Outer Glow Ring */}
                         {prize.isSpecial && (
-                            <motion.div 
+                            <motion.div
                                 className="absolute -inset-2 rounded-[28px] opacity-60"
                                 style={{
                                     background: 'linear-gradient(135deg, #FFD700, #FFA500, #FF6B6B, #FFD700)',
@@ -83,14 +83,13 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                             />
                         )}
 
-                        <div 
-                            className={`relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 lg:p-14 max-w-[90vw] sm:max-w-md md:max-w-xl lg:max-w-2xl w-full text-center overflow-hidden ${
-                                prize.isSpecial ? 'ring-2 ring-orange-400' : ''
-                            }`}
+                        <div
+                            className={`relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 lg:p-14 max-w-[90vw] sm:max-w-md md:max-w-xl lg:max-w-2xl w-full text-center overflow-hidden ${prize.isSpecial ? 'ring-2 ring-orange-400' : ''
+                                }`}
                         >
                             {/* Special Prize Top Banner */}
                             {prize.isSpecial && (
-                                <motion.div 
+                                <motion.div
                                     initial={{ y: -50, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.1, type: "spring" }}
@@ -106,18 +105,18 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                             {/* Decorative background circles */}
                             <div
                                 className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10"
-                                style={{ 
-                                    background: prize.isSpecial 
-                                        ? 'linear-gradient(45deg, #FFD700, #FFA500)' 
-                                        : prize.color 
+                                style={{
+                                    background: prize.isSpecial
+                                        ? 'linear-gradient(45deg, #FFD700, #FFA500)'
+                                        : prize.color
                                 }}
                             />
                             <div
                                 className="absolute -bottom-10 -left-10 w-24 h-24 rounded-full opacity-10"
-                                style={{ 
-                                    background: prize.isSpecial 
-                                        ? 'linear-gradient(45deg, #FF6B6B, #FFD700)' 
-                                        : '#FFD700' 
+                                style={{
+                                    background: prize.isSpecial
+                                        ? 'linear-gradient(45deg, #FF6B6B, #FFD700)'
+                                        : '#FFD700'
                                 }}
                             />
 
@@ -130,7 +129,7 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                             >
                                 {/* Special Prize Glow behind image */}
                                 {prize.isSpecial && (
-                                    <motion.div 
+                                    <motion.div
                                         className="absolute inset-0 rounded-full"
                                         style={{
                                             background: 'radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 70%)',
@@ -147,11 +146,10 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                         }}
                                     />
                                 )}
-                                
-                                <div 
-                                    className={`relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto rounded-full flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl overflow-hidden ${
-                                        prize.isSpecial ? 'ring-4 ring-orange-400 ring-offset-2' : ''
-                                    }`}
+
+                                <div
+                                    className={`relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto rounded-full flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl overflow-hidden ${prize.isSpecial ? 'ring-4 ring-orange-400 ring-offset-2' : ''
+                                        }`}
                                     style={{
                                         background: prize.isSpecial
                                             ? 'linear-gradient(135deg, #FFD700, #FFA500)'
@@ -185,46 +183,50 @@ const ResultModal = ({ isOpen, prize, onClose }: ResultModalProps) => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.25 }}
-                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 ${
-                                    prize.isSpecial 
-                                        ? 'text-transparent bg-clip-text'
-                                        : prize.isWin 
-                                            ? 'text-[#0054A6]' 
-                                            : 'text-gray-500'
-                                }`}
+                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 ${prize.isSpecial
+                                    ? 'text-transparent bg-clip-text'
+                                    : prize.isWin
+                                        ? 'text-[#0054A6]'
+                                        : 'text-gray-500'
+                                    }`}
                                 style={prize.isSpecial ? {
                                     background: 'linear-gradient(90deg, #FF6B6B, #FFA500, #FFD700)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
                                 } : {}}
                             >
-                                {prize.isSpecial 
-                                    ? 'Siêu May Mắn!' 
-                                    : prize.isWin 
-                                        ? 'Chúc mừng!' 
+                                {prize.isSpecial
+                                    ? 'Siêu May Mắn!'
+                                    : prize.isWin
+                                        ? 'Chúc mừng!'
                                         : 'Chưa may mắn'}
                             </motion.h2>
 
                             {/* Subtitle */}
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.35 }}
-                                className={`text-base md:text-lg lg:text-xl mb-3 md:mb-4 ${prize.isSpecial ? 'text-orange-500 font-medium' : 'text-gray-500'}`}
-                            >
-                                {prize.isSpecial 
-                                    ? 'Bạn đã trúng phần quà đặc biệt:' 
-                                    : prize.isWin 
-                                        ? 'Bạn đã trúng phần quà:' 
-                                        : 'Hãy thử lại nhé!'}
-                            </motion.p>
+                            {(prize.isSpecial || prize.isWin) && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.35 }}
+                                    className={`text-base md:text-lg lg:text-xl mb-3 md:mb-4 ${prize.isSpecial ? 'text-orange-500 font-medium' : 'text-gray-500'}`}
+                                >
+                                    {prize.isSpecial
+                                        ? 'Bạn đã trúng phần quà đặc biệt:'
+                                        : 'Bạn đã trúng phần quà:'}
+                                </motion.p>
+                            )}
 
                             {/* Prize Name */}
                             <motion.p
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 0.45 }}
-                                className={`font-black mb-6 sm:mb-8 md:mb-10 ${prize.isSpecial ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'}`}
+                                className={`font-black mb-6 sm:mb-8 md:mb-10 ${prize.isSpecial
+                                    ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
+                                    : prize.isWin
+                                        ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
+                                        : 'text-lg sm:text-xl md:text-2xl max-w-xs mx-auto'
+                                    }`}
                                 style={{
                                     background: prize.isSpecial
                                         ? 'linear-gradient(135deg, #FF6B6B, #FFA500, #FFD700)'

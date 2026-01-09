@@ -109,32 +109,14 @@ function App() {
           return DEFAULT_PRIZES
         }
         
-        // Nếu số lượng khớp, kiểm tra xem có prize nào thiếu image không
-        const needsMigration = loadedPrizes.some((p: Prize) => {
-          const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
-          return defaultPrize && defaultPrize.image && !p.image
-        })
-        
-        // Migrate images từ DEFAULT nếu cần
-        if (needsMigration) {
-          const migratedPrizes = loadedPrizes.map((p: Prize) => {
-            const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
-            if (defaultPrize && defaultPrize.image && !p.image) {
-              return { ...p, image: defaultPrize.image }
-            }
-            return p
-          })
-          return migratedPrizes
-        }
-        
-        // Đảm bảo isWin property được sync từ DEFAULT_PRIZES
+        // Đảm bảo isWin, label và image được sync từ DEFAULT_PRIZES
         const syncedPrizes = loadedPrizes.map((p: Prize) => {
           const defaultPrize = DEFAULT_PRIZES.find(dp => dp.id === p.id)
           if (defaultPrize) {
             return { 
               ...p, 
               isWin: defaultPrize.isWin,
-              image: p.image || defaultPrize.image,
+              image: defaultPrize.image, // Luôn lấy image từ DEFAULT
               label: defaultPrize.label // Sync label từ DEFAULT
             }
           }
